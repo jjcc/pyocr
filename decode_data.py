@@ -26,7 +26,7 @@ def ocr_top10(img, scale = 4):
             #cv2.imwrite("data/bocr%d.jpg" % num, blockimg3)
             img = Image.fromarray(blockimg3)
             text = pytesseract.image_to_string(img)
-            print  text
+            #print  text
             num += 1
             top10.append(text)
     return top10

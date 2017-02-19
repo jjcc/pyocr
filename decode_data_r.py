@@ -31,20 +31,8 @@ if __name__=="__main__":
     cv2.imwrite("data_r/crop_img2.jpg", crop_img2)
 
 
-    # #img2 = preprocess(crop_img2,99)
-    # #text = pytesseract.image_to_string(img2)
-    # imgl = crop_img2.copy()[yl: yl+hl, xl: xl + wl]
-    # img = preprocess(imgl, 60)
-    # textl = pytesseract.image_to_string(img)
-    # img2 = crop_img2.copy()[ym: ym+hm, xm: xm + wm]
-    # img = preprocess(img2, 61)
-    # textm = pytesseract.image_to_string(img)
-    # img3 = crop_img2[yr: yr+hr, xr: xr + wr]
-    # img = preprocess(img3, 62)
-    # textr = pytesseract.image_to_string(img)
-    #
-    #
-    # print "Text: %s, %s, %s"%(textl,textm,textr)
+
+    imgv = cv2.imread('data_r/lut_gr21.jpg',cv2.IMREAD_GRAYSCALE)
 
     x = rect1[0]
     y = rect1[1]
@@ -62,15 +50,20 @@ if __name__=="__main__":
         y = int(yy)
         ########
         imgl = crop_img2.copy()[yl: yl + hl, xl: xl + wl]
-        img = preprocess(imgl, i)
+        img = preprocess(imgl, i,bw=False)
         textl = pytesseract.image_to_string(img)
         img2 = crop_img2.copy()[ym: ym + hm, xm: xm + wm]
         img = preprocess(img2, i+10)
         textm = pytesseract.image_to_string(img)
         img3 = crop_img2[yr: yr + hr, xr: xr + wr]
-        img = preprocess(img3, i+20)
-        textr = pytesseract.image_to_string(img)
-        print "Text: %s, %s, %s" % (textl, textm, textr)
+        img = preprocess(img3, i+20,bw=False)
+
+        #textr = pytesseract.image_to_string(img)
+        imgA = np.asarray(img)
+        #gray to gray is best, bw to gray 2nd, bw to bw worst
+        resx = cv2.matchTemplate(imgA, imgv, cv2.TM_CCOEFF_NORMED)
+        scorex =  resx[0][0]
+        print "Text: %s, %s, %s" % (textl, textm, scorex)
 
 
         num +=1

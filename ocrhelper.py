@@ -13,7 +13,7 @@ for i in range(0, 256):
         ListaV[i] = value
 
 
-def preprocess(image,idx,scale=4, invert = False):
+def preprocess(image,idx,scale=4, invert = False, bw = True ):
     if invert:
         image = 255 - image
     image = cv2.cvtColor(image.copy(), cv2.COLOR_BGR2GRAY)
@@ -21,9 +21,14 @@ def preprocess(image,idx,scale=4, invert = False):
     ListaVnp = np.array(ListaV)
     lut_L = cv2.LUT(image, ListaVnp)
     lut_L = lut_L.astype(np.uint8)
+    file = "data_r/lut_gr%d.jpg"%idx
+    #cv2.imwrite(file, lut_L)
+
+    if bw == False:
+        return Image.fromarray(lut_L) # return gray image
     _, lut_bw = cv2.threshold(lut_L, 160, 255, cv2.THRESH_BINARY)
     file = "data_r/lut_bw%d.jpg"%idx
-    cv2.imwrite(file, lut_bw)
+    #cv2.imwrite(file, lut_bw)
     img = Image.fromarray(lut_bw)
     return img
 
