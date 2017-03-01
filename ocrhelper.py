@@ -1,7 +1,7 @@
 import numpy as np
 import cv2
 from PIL import Image
-
+import re
 
 ListaV = [0] * 256
 # initialize LUT
@@ -40,6 +40,8 @@ def get_green_area(img):
     :return: top left x, y and width , height
     '''
     shifted = cv2.pyrMeanShiftFiltering(img, 60, 100,1,2)
+
+    #cv2.imwrite("shifted.jpg",shifted)
     # define range of blue color in HSV
     lower_green = np.array([0,210,0])
     upper_green = np.array([15,255,15])
@@ -58,3 +60,26 @@ def get_green_area(img):
         if area > 200:
             x, y, w, h = cv2.boundingRect(cnt)
     return (x,y,w,h)
+
+
+
+def get_file_info( file):
+    match = re.search("[\w|_|-]+\.\w+$",file)
+    if match:
+        fn = match.group(0)
+        match = re.search("_(\d\d)_(\w+)_(20\d\d)",fn)
+        if match:
+            g = match.group()
+            mr = fn[match.end():] #How long ,until when
+
+            match =  re.search("(\d+|\w+)-(\w+)[-|\w]*-until-(\w+)-(\d+).*\.(\w+)",mr)
+            if(match):
+                length = match.group(1)
+                unit = match.group(2)
+                tomon = match.group(3)
+                todate = match.group(4)
+                format = match.group(5)
+
+            return (fn, g, mr, length,unit,tomon,todate,format)
+        print fn
+    return
