@@ -67,12 +67,12 @@ def get_file_info( file):
     match = re.search("[\w|_|-]+\.\w+$",file)
     if match:
         fn = match.group(0)
-        match = re.search("_(\d\d)_(\w+)_(20\d\d)",fn)
+        match = re.search("_(\d+)_*(\w+)_(20\d\d)",fn)
         if match:
             g = match.group()
             mr = fn[match.end():] #How long ,until when
 
-            match =  re.search("(\d+|\w+)-(\w+)[-|\w]*-until-(\w+)-(\d+).*\.(\w+)",mr)
+            match =  re.search("(\d+|\w+)-(\w+)[-|\w]*-[U|u]ntil-(\w+)-(\d+).*\.(\w+)",mr)
             if(match):
                 length = match.group(1)
                 unit = match.group(2)
