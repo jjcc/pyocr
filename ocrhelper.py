@@ -67,9 +67,16 @@ def get_file_info( file):
     match = re.search("[\w|_|-]+\.\w+$",file)
     if match:
         fn = match.group(0)
-        match = re.search("_(\d+)_*(\w+)_(20\d\d)",fn)
+        match = re.search("_(\d+)_*(\w{3})_(20\d\d)",fn)
         if match:
             g = match.group()
+
+            mf = fn[:match.start()] #front
+            match2 = re.search("IKForecast_",mf);
+            cat = "**Unknown"
+            if match2:
+                cat = mf[match2.end():]
+
             mr = fn[match.end():] #How long ,until when
 
             match =  re.search("(\d+|\w+)-(\w+)[-|\w]*-[U|u]ntil-(\w+)-(\d+).*\.(\w+)",mr)
@@ -80,6 +87,6 @@ def get_file_info( file):
                 todate = match.group(4)
                 format = match.group(5)
 
-            return (fn, g, mr, length,unit,tomon,todate,format)
-        print fn
+            return (fn, g, cat, mf, mr, length,unit,tomon,todate,format)
+        #print fn
     return
